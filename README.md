@@ -10,7 +10,7 @@ Adds GIF support in iOS
 5. Click the [ + ] button and select the UIGifImage.framework
 
 
-# instructions
+# Instructions
 
 UIImageview instances will automatically start animating after assigning the gif as their image
 
