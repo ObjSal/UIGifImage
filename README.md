@@ -12,10 +12,10 @@ Adds GIF support in iOS
 
 # Instructions
 
-UIImageview instances will automatically start animating after assigning the gif as their image
+UIImageView instances will automatically start animating after assigning the gif as its image
 
 ```
-UIGifImage *gif = [[UIGifImage alloc] initWithData:imageData];
+UIGifImage *gif = [UIGifImage imageWithData:imageData];
 anUiImageView.image = gif;
 ```
 
