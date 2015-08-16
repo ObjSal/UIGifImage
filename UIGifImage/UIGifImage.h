@@ -22,6 +22,19 @@ FOUNDATION_EXPORT const unsigned char UIGifImageVersionString[];
 @property (nonatomic, readonly) NSArray         *images;
 @property (nonatomic, readonly) NSTimeInterval  duration;
 
+// init instance methods
+
+- (instancetype)initWithData:(NSData *)data;
+- (instancetype)initWithData:(NSData *)data scale:(CGFloat)scale;
+
+// init class methods
+
++ (instancetype)imageWithData:(NSData *)data;
++ (instancetype)imageWithData:(NSData *)data scale:(CGFloat)scale;
++ (instancetype)imageWithContentsOfFile:(NSString *)path;
+
+// returns YES if the given data contains a gif image
+
 + (BOOL)containsGifData:(NSData *)data;
 
 @end

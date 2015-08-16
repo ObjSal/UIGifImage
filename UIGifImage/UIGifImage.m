@@ -41,6 +41,28 @@
     return self;
 }
 
+- (instancetype)initWithData:(NSData *)data scale:(CGFloat)scale
+{
+    return [super initWithData:data scale:scale];
+}
+
++ (instancetype)imageWithData:(NSData *)data
+{
+    return [[self alloc] initWithData:data];
+}
+
++ (instancetype)imageWithData:(NSData *)data scale:(CGFloat)scale
+{
+    return [[self alloc] initWithData:data scale:scale];
+}
+
++ (instancetype)imageWithContentsOfFile:(NSString *)path
+{
+    NSData *data = [NSData dataWithContentsOfFile:path];
+
+    return [[self alloc] initWithData:data];
+}
+
 + (BOOL)containsGifData:(NSData *)data
 {
     uint8_t *dataBytes = (uint8_t *)data.bytes;
