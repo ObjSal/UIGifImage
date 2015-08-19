@@ -6,6 +6,20 @@
 	objectVersion = 46;
 	objects = {
 
+/* Begin PBXAggregateTarget section */
+		3EC2CAC81B84427E00E2521A /* UniversalFramework */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 3EC2CACB1B84427E00E2521A /* Build configuration list for PBXAggregateTarget "UniversalFramework" */;
+			buildPhases = (
+				3EC2CACC1B84428E00E2521A /* ShellScript */,
+			);
+			dependencies = (
+			);
+			name = UniversalFramework;
+			productName = UniversalFramework;
+		};
+/* End PBXAggregateTarget section */
+
 /* Begin PBXBuildFile section */
 		3EA67A551B7FCCAD00B023F3 /* UIGifImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3EA67A491B7FCCAC00B023F3 /* UIGifImage.framework */; };
 		3EA67A5C1B7FCCAD00B023F3 /* UIGifImageTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EA67A5B1B7FCCAD00B023F3 /* UIGifImageTests.m */; };
@@ -190,6 +204,9 @@
 					3EA67A531B7FCCAD00B023F3 = {
 						CreatedOnToolsVersion = 6.4;
 					};
+					3EC2CAC81B84427E00E2521A = {
+						CreatedOnToolsVersion = 6.4;
+					};
 				};
 			};
 			buildConfigurationList = 3EA67A431B7FCCAC00B023F3 /* Build configuration list for PBXProject "UIGifImage" */;
@@ -206,6 +223,7 @@
 			targets = (
 				3EA67A481B7FCCAC00B023F3 /* UIGifImage */,
 				3EA67A531B7FCCAD00B023F3 /* UIGifImageTests */,
+				3EC2CAC81B84427E00E2521A /* UniversalFramework */,
 			);
 		};
 /* End PBXProject section */
@@ -220,6 +238,22 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		3EC2CACC1B84428E00E2521A /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# define output folder environment variable\n\nUNIVERSAL_OUTPUTFOLDER=${BUILD_DIR}/${CONFIGURATION}-universal\nTARGET_NAME=UIGifImage\nBUILD_NUMBER=$(/usr/libexec/PlistBuddy -c \"Print CFBundleShortVersionString\" \"${PROJECT_NAME}/Info.plist\")\nZIP_FILEPATH=\"${BUILD_DIR}/${TARGET_NAME}_v${BUILD_NUMBER}.zip\"\n\n# Step 1. Build Device\n\nxcodebuild -target \"${TARGET_NAME}\" ONLY_ACTIVE_ARCH=NO -configuration ${CONFIGURATION} -sdk iphoneos  BUILD_DIR=\"${BUILD_DIR}\" BUILD_ROOT=\"${BUILD_ROOT}\"\n\n# Step 2. Build Simulator x86_64\n\nxcodebuild -target \"${TARGET_NAME}\" -configuration ${CONFIGURATION} -sdk iphonesimulator -arch x86_64 BUILD_DIR=\"${BUILD_DIR}\" BUILD_ROOT=\"${BUILD_ROOT}\"\n\n# Step 3. build simulator i386\n\nxcodebuild -target \"${TARGET_NAME}\" -configuration ${CONFIGURATION} -sdk iphonesimulator -arch i386 BUILD_DIR=\"${BUILD_DIR}_i386\" BUILD_ROOT=\"${BUILD_ROOT}\"\n\n# Step 4. make sure the output directory exists\n\nmkdir -p \"${UNIVERSAL_OUTPUTFOLDER}\"\n\n# Step 5. copy everything from the iphoneos folder into the universal folder and just delete the binary\n\ncp -rf \"${BUILD_DIR}/${CONFIGURATION}-iphoneos/\" \"${UNIVERSAL_OUTPUTFOLDER}\"/\n\n# Step 6. delete the binary because we're going to create a universal one :)\n\nrm \"${UNIVERSAL_OUTPUTFOLDER}/${PROJECT_NAME}.framework/${PROJECT_NAME}\"\n\n# Step 7. Create universal binary file using lipo\n\nlipo -create -output \"${UNIVERSAL_OUTPUTFOLDER}/${PROJECT_NAME}.framework/${PROJECT_NAME}\" \"${BUILD_DIR}/${CONFIGURATION}-iphoneos/${PROJECT_NAME}.framework/${PROJECT_NAME}\" \"${BUILD_DIR}/${CONFIGURATION}-iphonesimulator/${PROJECT_NAME}.framework/${PROJECT_NAME}\" \"${BUILD_DIR}_i386/${CONFIGURATION}-iphonesimulator/${PROJECT_NAME}.framework/${PROJECT_NAME}\"\n\n# Step 8. remove the i386 directory, not currently used by my simulators\n\nrm -rf \"${BUILD_DIR}_i386\"\n\n# Step 9. remove the previous zip\n\nif [[ -f \"${ZIP_FILEPATH}\" ]]; then\nrm \"${ZIP_FILEPATH}\"\nfi\n\n# Step 10. zip the framework\n\npushd \"${UNIVERSAL_OUTPUTFOLDER}\"\n\nzip -r \"${ZIP_FILEPATH}\" \"${PROJECT_NAME}.framework\"\n\npopd\n\n#Step 11. open the build products directory automatically\n\nopen ${BUILD_DIR}\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		3EA67A441B7FCCAC00B023F3 /* Sources */ = {
@@ -397,6 +431,20 @@
 			};
 			name = Release;
 		};
+		3EC2CAC91B84427E00E2521A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		3EC2CACA1B84427E00E2521A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -426,6 +474,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		3EC2CACB1B84427E00E2521A /* Build configuration list for PBXAggregateTarget "UniversalFramework" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3EC2CAC91B84427E00E2521A /* Debug */,
+				3EC2CACA1B84427E00E2521A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 	};
