@@ -1,7 +1,14 @@
 # UIGifImage
 Adds GIF support to iOS
 
-# Installation
+# Pod Installation
+
+```
+    pod 'UIGifImage'
+```
+
+
+# Manual Installation
 
 1. Download the latest release from https://github.com/ObjSal/UIGifImage/releases
 2. Drag and drop the UIGifImage.framework to your project and select "Copy Items if Needed".
@@ -18,6 +25,7 @@ UIImageView instances will automatically start animating after assigning the gif
 UIGifImage *gif = [UIGifImage imageWithData:imageData];
 anUiImageView.image = gif;
 ```
+
 
 # Requirements
 
